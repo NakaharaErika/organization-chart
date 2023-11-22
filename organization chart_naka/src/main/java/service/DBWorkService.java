@@ -12,7 +12,10 @@ public class DBWorkService {
 	WorkDaoJDBC dao = new WorkDaoJDBC();
 	
 	private String checkUserIdSQL = "SELECT COUNT(*) FROM Employee WHERE emp_code = ?";
-	private String checkUserPassSQL = "SELECT * FROM Employee WHERE emp_code=? AND pass=?";
+	private String checkUserPassSQL = "SELECT * FROM Employee "
+									+ "INNER JOIN Department ON Employee.dep_id = Department.dep_id "
+									+ "LEFT JOIN Post ON Employee.post_id = Post.post_id "
+									+ "WHERE emp_code=? AND pass=?";
 	
 	//ユーザーIDが既に登録されているか調べる
 	public Boolean checkempCodeExist(String userId) throws Exception{
@@ -22,7 +25,7 @@ public class DBWorkService {
         List<HashMap<String, Object>> result = dao.executeQuery(checkUserIdSQL,params);
         //もし、得られた結果がnulはなく、１行目のキーの中身がnullでなければ（この場合は1)なら、1(true)を返す
         //"COUNT(*))"は、sql実行の時に結果として得られる列の一つ
-		if(!result.isEmpty() && result.get(0).get("COUNT(*))") !=null){
+		if(!result.isEmpty() && result.get(0).get("COUNT(*)") !=null){
 			return (Long) result.get(0).get("COUNT(*)") > 0;
 		}
 		return false;
@@ -40,8 +43,13 @@ public class DBWorkService {
 	    	HashMap<String,Object> row = result.get(0);
 	    	//DTO作成
 	    	DBWork dbWork = new DBWork(id);
+	    	dbWork.setEmpCode((String) row.get("emp_code"));
 	    	dbWork.setFamilyName((String) row.get("family_name"));
 	    	dbWork.setLastName((String) row.get("last_name"));
+	    	dbWork.setDepId((Integer) row.get("dep_id"));
+	    	dbWork.setPostId((Integer) row.get("post_id"));
+	    	dbWork.setDepName((String) row.get("dep_name"));
+	    	dbWork.setPostName((String) row.get("post_name"));
 	    	return dbWork;
 	    }
 	    return null;

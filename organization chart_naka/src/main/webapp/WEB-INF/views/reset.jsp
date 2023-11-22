@@ -19,7 +19,7 @@ contentType="text/html; charset=UTF-8"
 	<%} %>
 	<!-- ユーザーIDとパスワードの入力を行う -->
 	<form action="reset" method="post">
-		<span><strong>現在のユーザーID</strong></span>
+		<span><strong>現在の社員番号</strong></span>
 	    <input type="text" name="user_id">
 	    <br>
 	    <span><strong>新しいパスワード</strong></span>

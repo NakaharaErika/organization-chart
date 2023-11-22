@@ -17,9 +17,9 @@ public class WorkDaoJDBC {
 		String dbUrl = "jdbc:mysql://localhost/prac_1";
 		String dbUser = "root";
 		String dbPassword = "";
-		
+		// JDBCドライバーをロード
 		Class.forName("com.mysql.jdbc.Driver");
-		return DriverManager.getConnection(dbUrl,dbUser,dbPassword);
+		return DriverManager.getConnection(dbUrl, dbUser, dbPassword);
 	}
 	
 	//汎用メソッド(削除、更新、作成)

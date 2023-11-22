@@ -7,6 +7,14 @@ public class DBWork {
 	private String familyName;
 	/** 名 */
 	private String lastName;
+	/** 部署id */
+	private int depId;
+	/** 役職id */
+	private int postId;
+	/** 部署名 */
+	private String depName;
+	/** 役職名 */
+	private String postName;
 
 	/**
 	 * コンストラクタ
@@ -40,6 +48,46 @@ public class DBWork {
     }
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+    
+    /**部署IDのゲッターとセッター*/
+    public int getDepId() {
+    	return depId;
+    }
+    public void setDepId(int depId) {
+    	this.depId = depId;
+    }
+    
+    /**役職IDのゲッターとセッター*/
+    public int getPostId() {
+    	return postId;
+    }
+    public void setPostId(Integer postId) {
+    	if(postId != null) {
+    		this.postId = postId;
+    	} else {
+    		this.postId = 0;
+    	}
+    }
+    
+    /**部署のゲッターとセッター*/
+    public String getDepName() {
+    	return depName;
+    }
+    public void setDepName(String depName) {
+    	this.depName = depName;
+    }
+    
+    /**役職のゲッターとセッター*/
+    public String getPostName() {
+    	return postName;
+    }
+    public void setPostName(String postName) {
+    	if(postName != null) {
+    		this.postName = postName;
+    	} else {
+    		this.postName = "平社員・その他";
+    	}
     }
     
     

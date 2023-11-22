@@ -41,17 +41,18 @@ public class StartServlet extends HttpServlet {
 				//アカウントがロックされていないかチェック
 				if(!check.isAccountLocked(empCode)){
 			    	//パスワードが一致しているかチェック
-			    	DBWork dbWork = service.login(empCode, password);//DBWorkクラスにempCode,name,No(主キー）をセット
+			    	DBWork dbWork = service.login(empCode, password);//一致していたらDBWorkクラスにempCode,name,family_name,last_name,dep_id,post_id,id(主キー）をセット
 			    	if(dbWork != null) {//ログイン成功
 			    		//パスワードが一致していたら、フラグを０に戻してdbWrokに値を設定
 				    	check.countReset(empCode);
-				    	HttpSession session = request.getSession();//パスワード以外の情報をセッションとして保持
+				    	HttpSession session = request.getSession();//パスワード以外の情報をセッションとして登録
 				        session.setAttribute("loggedInUser", dbWork);
 				        
-				        view = "/list";
+				        view = "/check";
 			    	} else {//ログイン失敗
-			    		//一致していなかったら失敗カウントを調べる
+			    		//一致していなかったら失敗カウントをカウントアップ
 			    		boolean canRetry = check.incrementFalseCnt(empCode);
+			    		//失敗カウントを調べて,3回未満ならtrue、3回以上ならfalseを返す。
 			    		String falseMessage = canRetry? "IDかパスワードが異なります":"３回間違えたのでロックしました";
 			    		request.setAttribute("message", falseMessage);
 			    		view = "/WEB-INF/views/login.jsp";
