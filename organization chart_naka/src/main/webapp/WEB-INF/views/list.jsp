@@ -28,7 +28,7 @@ contentType="text/html; charset=UTF-8"
 	    </nav>
 	</header>
 	
-	<p><a href='new'>新規登録</a><p><!-- 社員の追加登録 -->	
+	<p><a href='preCreate'>新規登録</a><p><!-- 社員の追加登録 -->	
 	
 	<div class="container">
   		<div class="row ">

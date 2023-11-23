@@ -36,7 +36,7 @@ public class UpdateEmpServlet extends HttpServlet {
 		String lastName = request.getParameter("last_name"); 
 		String depId = request.getParameter("Employee.dep_id"); 
 		String postId = request.getParameter("Employee.post_id"); 
-		String hireDate = request.getParameter("birth_year") + "-" + request.getParameter("birth_month") + "-" + request.getParameter("birth_day");
+		String hireDate = request.getParameter("hire_date_year") + "-" + request.getParameter("hire_date_month") + "-" + request.getParameter("hire_date_day");
 		String birth = request.getParameter("birth_year") + "-" + request.getParameter("birth_month") + "-" + request.getParameter("birth_day");
 	
 		List<Object> params = Arrays.asList(empCode,familyName,lastName,depId,postId,hireDate,birth,id);
@@ -50,7 +50,7 @@ public class UpdateEmpServlet extends HttpServlet {
 			}
             
        
-        String forward = "show?id=" + postId;
+        String forward = "show?id=" + id;
 		RequestDispatcher dispatcher = request.getRequestDispatcher(forward);
 		dispatcher.forward(request, response);
 		} else {

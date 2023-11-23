@@ -30,13 +30,13 @@ contentType="text/html; charset=UTF-8"
 	    	<form action="logout" method="POST"><input type="submit" value="ログアウト"></form>
 	    </nav>
 	</header>
-<%String message = (String)request.getAttribute("message"); %>
+ <%String message = (String)request.getAttribute("message"); %>
 <% if (message != null) {%>
 	    <%=message %>
 <%} %>
 <div class="container">
   		<div class="row mt-3">
-  		<form action="update" method="get">    
+  		<form action="create" method="post">    
   		<table class="table">
 			<thead>
 				<tr>
@@ -49,23 +49,23 @@ contentType="text/html; charset=UTF-8"
 			</thead>
 			<tbody>
 				<tr>
-				<% HashMap<String, String> empDetails = (HashMap<String, String>) request.getAttribute("empDetails"); %>
+				<% String empDetails = (String) request.getAttribute("empDetails"); %>
 				    <% if (empDetails != null) { %>
-				    <input type="hidden" name="id" value='<%= empDetails.get("id") %>'>
 					 <div class="row">
 						<td><!-- 社員番号 -->
 							<div class="col-auto">   
-							  <input type="text" class="form-control" name="emp_code" value="<%= empDetails.get("emp_code") %>">
+							  <input type="text" class="form-control" name="emp_code">
+							  <label>取得済みの最新の社員番号:<%= empDetails %></label>
 							</div>
 					    </td>
 					    <td><!-- 性 -->
 					    	<div class="col-auto">   
-							  <input type="text" class="form-control" name="family_name" value="<%= empDetails.get("family_name") %>">
+							  <input type="text" class="form-control" name="family_name">
 							 </div>
 					    </td>
 					    <td><!-- 名 -->
 					    	<div class="col-auto">   
-							  <input type="text" class="form-control" name="last_name" value="<%= empDetails.get("last_name") %>">
+							  <input type="text" class="form-control" name="last_name">
 							</div>
 					    </td>
 					    <td><!-- 所属部署 -->
@@ -77,7 +77,7 @@ contentType="text/html; charset=UTF-8"
 				                    Integer depId = department.getDepId(); // 部署IDを取得
 				                    String depName = department.getDepName(); // 部署名を取得
 					        %>
-					                        <option value = "<%= depId %>" <%= depName.equals(empDetails.get("dep_name"))? "selected" : "" %>><%= depName %></option>
+					                        <option value = "<%= depId %>"><%= depName %></option>
 					        <%
 					                }
 					            }
@@ -86,6 +86,7 @@ contentType="text/html; charset=UTF-8"
 					    </td>
 					    <td><!-- 役職 -->
 					    	<select name = "Employee.post_id" id="inputState" class="form-select mb-1">
+					    	<option value = ""></option>
 					    	<% 
 				            List<PostWork> posts = (List<PostWork>) session.getAttribute("posts");
 				            if (posts != null) {
@@ -93,7 +94,7 @@ contentType="text/html; charset=UTF-8"
 				                    Integer postId = post.getPostId(); // 役職IDを取得
 				                    String postName = post.getPostName(); // 役職名を取得
 					        %>
-					                        <option value = "<%= postId %>" <%= postName.equals(empDetails.get("post_name"))? "selected" : "" %>><%= postName %></option>
+					                        <option value = "<%= postId %>"><%= postName %></option>
 					        <%
 					                }
 					            }
@@ -109,6 +110,7 @@ contentType="text/html; charset=UTF-8"
 				<tr>
 				    <th scope="col">入社日</th>
 				    <th scope="col">誕生日</th>
+				    <th scope="col">パスワード</th>
 				</tr>
 			</thead>
 			<tbody>	
@@ -116,35 +118,39 @@ contentType="text/html; charset=UTF-8"
 					    <td><!-- 入社日 -->
 					    <div class="row">
   							<div class="col-auto">
-							    <input type="text" class="form-control" name="hire_date_year" value="<%= DateUtil.getYear(empDetails.get("hire_date")) %>" size="4">
+							    <input type="text" class="form-control" name="hire_date_year" value="1970" size="4">
 							</div>
 							<div class="col-auto">
-							    <input type="text" class="form-control" name="hire_date_month" value="<%= DateUtil.getMonth(empDetails.get("hire_date")) %>" size="2">
+							    <input type="text" class="form-control" name="hire_date_month" value="01" size="2">
 							</div>
 							<div class="col-auto">
-							    <input type="text" class="form-control" name="hire_date_day" value="<%= DateUtil.getDay(empDetails.get("hire_date")) %>" size="2">
+							    <input type="text" class="form-control" name="hire_date_day" value="01" size="2">
 							</div>
 						</div>
 						</td>
 						<td><!-- 誕生日 -->
 						<div class="row">
   							<div class="col-auto">
-							    <input type="text" class="form-control" name="birth_year" value="<%= DateUtil.getYear(empDetails.get("Birth")) %>" size="4">
+							    <input type="text" class="form-control" name="birth_year" value="1970" size="4">
 							</div>
 							<div class="col-auto">
-							    <input type="text" class="form-control" name="birth_month" value="<%= DateUtil.getMonth(empDetails.get("Birth")) %>" size="2">
+							    <input type="text" class="form-control" name="birth_month" value="01" size="2">
 							</div>
 							<div class="col-auto">
-							    <input type="text" class="form-control" name="birth_day" value="<%= DateUtil.getDay(empDetails.get("Birth")) %>" size="2">
+							    <input type="text" class="form-control" name="birth_day" value="01" size="2">
+							</div>
+						</td>
+						<td><!-- パスワード -->
+					    	<div class="col-auto">   
+							  <input type="text" class="form-control" name="pass">
 							</div>
 						</div>
-						</td>
-		    
+					    </td>
 				    <% } %>
 				</tr>
 			</tbody>
 		</table>
-		<button type="submit" class="btn btn-primary mb-2">保存する</button>
+		<button type="submit" class="btn btn-primary mb-2">新規登録</button>
 		</form>
 		    <ul>
 		      <li>
@@ -152,7 +158,6 @@ contentType="text/html; charset=UTF-8"
 			    	<button type="submit" style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer; padding: 0; font: inherit;">戻る</button>
 				  </form>
 			  </li>
-			  <li><a href='show?id=<%= empDetails.get("id") %>'>キャンセル</a></li>
 		    </ul>
  		</div>
 </div>      
