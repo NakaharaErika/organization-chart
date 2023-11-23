@@ -1,13 +1,16 @@
 package service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 import dao.WorkDaoJDBC;
 import entity.DBWork;
+import entity.DepartmentWork;
+import entity.PostWork;
 
-public class DBWorkService {
+public class WorkService {
 
 	WorkDaoJDBC dao = new WorkDaoJDBC();
 	
@@ -16,6 +19,8 @@ public class DBWorkService {
 									+ "INNER JOIN Department ON Employee.dep_id = Department.dep_id "
 									+ "LEFT JOIN Post ON Employee.post_id = Post.post_id "
 									+ "WHERE emp_code=? AND pass=?";
+	private String getAllDepartmentsSQL = "SELECT * FROM Department";
+	private String getAllPostsSQL = "SELECT * FROM Post";
 	
 	//ユーザーIDが既に登録されているか調べる
 	public Boolean checkempCodeExist(String userId) throws Exception{
@@ -54,4 +59,37 @@ public class DBWorkService {
 	    }
 	    return null;
 	}
+    
+    //部署リストをDTOに登録
+    public List<DepartmentWork> getAllDepartments() throws Exception {
+    	//変数を格納
+    	List<Object> params = Arrays.asList();
+        List<HashMap<String, Object>> result = dao.executeQuery(getAllDepartmentsSQL, params);
+        List<DepartmentWork> departments = new ArrayList<>();
+        //得られた部署IDと部署名の組み合わせを登録
+        for (HashMap<String, Object> row : result) {
+            DepartmentWork department = new DepartmentWork();
+            department.setDepId((int) row.get("dep_id"));
+            department.setDepName((String) row.get("dep_name"));
+            departments.add(department);
+        }
+        return departments;
+    }
+    
+    //役職リストをDTOに登録
+    public List<PostWork> getAllPosts() throws Exception {
+    	//変数を格納
+    	List<Object> params = Arrays.asList();
+    	List<HashMap<String, Object>> result = dao.executeQuery(getAllPostsSQL, params);
+    	List<PostWork> posts = new ArrayList<>();
+    	//得られた部署IDと部署名の組み合わせを登録
+    	for (HashMap<String, Object> row : result) {
+    		PostWork post = new PostWork();
+    		post.setPostId((int) row.get("post_id"));
+    		post.setPostName((String) row.get("post_name"));
+    		posts.add(post);
+    	}
+    	return posts;
+    }
+
 }

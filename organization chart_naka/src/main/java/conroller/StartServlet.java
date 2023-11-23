@@ -1,8 +1,11 @@
 package conroller;
 
 import java.io.IOException;
+import java.util.List;
 
 import entity.DBWork;
+import entity.DepartmentWork;
+import entity.PostWork;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -11,12 +14,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import service.CheckFalseCount;
-import service.DBWorkService;
+import service.WorkService;
 
 @WebServlet("/start")
 public class StartServlet extends HttpServlet {
 	
-	DBWorkService service = new DBWorkService();
+	WorkService service = new WorkService();
 	CheckFalseCount check = new CheckFalseCount();
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -47,6 +50,12 @@ public class StartServlet extends HttpServlet {
 				    	check.countReset(empCode);
 				    	HttpSession session = request.getSession();//パスワード以外の情報をセッションとして登録
 				        session.setAttribute("loggedInUser", dbWork);
+				        // 部署情報を取得してセッションに保存
+				        List<DepartmentWork> departments = service.getAllDepartments();
+				        session.setAttribute("departments", departments);
+				        // 役職情報を取得してセッションに保存
+				        List<PostWork> posts = service.getAllPosts();
+				        session.setAttribute("posts", posts);
 				        
 				        view = "/check";
 			    	} else {//ログイン失敗

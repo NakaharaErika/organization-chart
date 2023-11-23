@@ -1,5 +1,6 @@
+
 header {
-   padding: 0,30px;
+   padding: 0 30px;
    position: sticky;
    top: 0;
    z-index: 999;
@@ -23,3 +24,10 @@ li {
 nav {
    margin: 0 0 0 auto;
 }
+
+.sarch{
+	border-radius: 3%;
+    border: 1px solid lightgray;
+    padding: 10px;
+}
+

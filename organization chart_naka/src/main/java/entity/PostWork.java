@@ -2,7 +2,7 @@ package entity;
 
 public class PostWork {
 	/** 役職ID */
-	private String postId;
+	private int postId;
 	/** 役職名 */
 	private String postName;
 	
@@ -15,10 +15,10 @@ public class PostWork {
 	
 	
 	/**部署IDのゲッターとセッター*/
-	public String getPostId() {
+	public int getPostId() {
 		return postId;
 	}
-	public void setPostId(String postId) {
+	public void setPostId(int postId) {
 		this.postId = postId;
 	}
 	

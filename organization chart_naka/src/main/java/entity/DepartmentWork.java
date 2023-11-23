@@ -2,7 +2,7 @@ package entity;
 
 public class DepartmentWork {
 	/** 部署ID */
-	private String depId;
+	private int depId;
 	/** 部署名 */
 	private String depName;
 	
@@ -14,17 +14,17 @@ public class DepartmentWork {
 	}
 
 	
-	public DepartmentWork(String depId) {
+	public DepartmentWork(int depId) {
 		this.depId = depId;
 		
 	}
 	
 	
 	/**部署IDのゲッターとセッター*/
-	public String getdepId() {
+	public int getDepId() {
 		return depId;
 	}
-	public void setDepId(String depId) {
+	public void setDepId(int depId) {
 		this.depId = depId;
 	}
 	
