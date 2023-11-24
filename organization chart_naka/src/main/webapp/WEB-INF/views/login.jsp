@@ -30,7 +30,5 @@ contentType="text/html; charset=UTF-8"
 	</form>
 	<br>
 	
-	<p><a href='resetAcc'>パスワードをリセット</a><p>
-	
 </body>
 </html>

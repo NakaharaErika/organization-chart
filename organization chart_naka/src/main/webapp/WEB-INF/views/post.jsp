@@ -29,6 +29,10 @@ contentType="text/html; charset=UTF-8"
 	</header>
 <div class="container">
   		<div class="row mt-3">
+  		<%String message = (String)request.getAttribute("message"); %>
+		<% if (message != null) {%>
+			    <%=message %>
+		<%} %>
   		<div class="col-md-6 mt-3">    
   		<table class="table">
 			<thead>
@@ -56,11 +60,14 @@ contentType="text/html; charset=UTF-8"
 			</tbody>
 		</table>
 		    <ul>
-		      <li><form action="list" method="post" style="display: inline;">
-		    <button type="submit" style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer; padding: 0; font: inherit;">戻る</button>
-		</form></li>
+		      <li>
+		        <form action="list" method="post" style="display: inline;">
+		    		<button type="submit" style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer; padding: 0; font: inherit;">戻る</button>
+				</form>
+			  </li>
 		      <li><p><a href='edit?id=<%= empDetails.get("id") %>'>編集</a></p></li>
 		      <li><p><a href='destroy?id=<%= empDetails.get("id") %>'>削除</a></p></li>
+		      <li><p><a href='resetPass?empCode=<%= empDetails.get("emp_code") %>'>パスワードをリセット</a><p><li>
 		    </ul>
  		</div>
  		</div>

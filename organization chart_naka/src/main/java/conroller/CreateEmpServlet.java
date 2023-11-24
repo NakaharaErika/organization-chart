@@ -21,7 +21,7 @@ public class CreateEmpServlet extends HttpServlet {
 	WorkService service = new WorkService();
     CreateEmp createaccount = new CreateEmp();
     
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
     	 HttpSession session = request.getSession();
          DBWork loggedInUser = (DBWork) session.getAttribute("loggedInUser");
@@ -33,37 +33,40 @@ public class CreateEmpServlet extends HttpServlet {
 				request.setAttribute("message", "社員詳細");
 			}
 		
-		String empCode = request.getParameter("emp_code"); 
-		String familyName = request.getParameter("family_name"); 
-		String lastName = request.getParameter("last_name"); 
-		String depId = request.getParameter("Employee.dep_id"); 
-		String postId = request.getParameter("Employee.post_id"); 
-		String hireDate = request.getParameter("hire_date_year") + "-" + request.getParameter("hire_date_month") + "-" + request.getParameter("hire_date_day");
-		String birth = request.getParameter("birth_year") + "-" + request.getParameter("birth_month") + "-" + request.getParameter("birth_day");
-		String pass = request.getParameter("pass"); 
-	
-		List<Object> params = Arrays.asList(empCode,familyName,lastName,depId,postId,hireDate,birth);
+			String empCode = request.getParameter("emp_code"); 
+			String familyName = request.getParameter("family_name"); 
+			String lastName = request.getParameter("last_name"); 
+			String depId = request.getParameter("Employee.dep_id"); 
+			String postId = request.getParameter("Employee.post_id"); 
+			String hireDate = request.getParameter("hire_date_year") + "-" + request.getParameter("hire_date_month") + "-" + request.getParameter("hire_date_day");
+			String birth = request.getParameter("birth_year") + "-" + request.getParameter("birth_month") + "-" + request.getParameter("birth_day");
+			String pass = request.getParameter("pass"); 
 		
-        String view = null;
-        String message = null;
-		try {
-			//社員番号が重複していないか調べる
-			 if (!service.checkempCodeExist(empCode)) {
-				 createaccount.createEmp(params, pass);
-			     message = "社員を登録しました";
-			     view = "list";
-			 } else {
-				 message = "社員番号が重複しています";
-				 view = "preCreate";
-			 }
+			List<Object> params = Arrays.asList(empCode,familyName,lastName,depId,postId,hireDate,birth);
 			
-		} catch (Exception e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
+	        String view = null;
+	        String errormessage = null;
+			try {
+				//社員番号が重複していないか調べる
+				 if (!service.checkempCodeExist(empCode)) {
+					 createaccount.createEmp(params, pass);
+				     errormessage = "社員を登録しました";
+				     view = "list";
+				 } else {
+					 errormessage = "社員番号が重複しています";
+					 view = "preCreate";
+				 }
+				
+			} catch (Exception e) {
+				// TODO 自動生成された catch ブロック
+				e.printStackTrace();
+			}
+			 request.setAttribute("message", errormessage);
+			 RequestDispatcher dispatcher = request.getRequestDispatcher(view);
+		     dispatcher.forward(request, response);
+    	} else {
+	    	response.sendRedirect("start");
 		}
-		 request.setAttribute("message", message);
-		 RequestDispatcher dispatcher = request.getRequestDispatcher(view);
-	     dispatcher.forward(request, response);
     }
 }
-}
+

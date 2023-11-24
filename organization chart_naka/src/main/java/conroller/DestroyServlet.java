@@ -30,7 +30,7 @@ public class DestroyServlet extends HttpServlet {
     		String empId = request.getParameter("id"); // String 型のまま使用
         	try {
 				service.destroyEmp(empId);
-				request.setAttribute("message", "削除が完了しました");
+				request.setAttribute("errormessage", "削除が完了しました");
 			} catch (Exception e) {
 				// TODO 自動生成された catch ブロック
 				e.printStackTrace();

@@ -30,7 +30,7 @@ contentType="text/html; charset=UTF-8"
 	    	<form action="logout" method="POST"><input type="submit" value="ログアウト"></form>
 	    </nav>
 	</header>
- <%String message = (String)request.getAttribute("message"); %>
+<%String message = (String)request.getAttribute("message"); %>
 <% if (message != null) {%>
 	    <%=message %>
 <%} %>

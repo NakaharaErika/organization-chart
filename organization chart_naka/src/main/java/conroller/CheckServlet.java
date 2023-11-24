@@ -20,8 +20,10 @@ public class CheckServlet extends HttpServlet {
         DBWork loggedInUser = (DBWork) session.getAttribute("loggedInUser");
 			if(loggedInUser != null) {
 				//セッションに登録された社員の役職コードで遷移先を判断
+				//情報管理部は平社員も全ての権限を持つ
 				Integer postId = loggedInUser.getPostId();
-				if(postId > 0 && postId <= 2) {//閲覧権限あり
+				Integer depId = loggedInUser.getDepId();
+				if(depId == 2 || postId > 0 && postId <= 2) {//閲覧権限あり
 					//listサーブレットに遷移
 					String view = "/list";
 					RequestDispatcher dispatcher = request.getRequestDispatcher(view);

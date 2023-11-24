@@ -28,7 +28,7 @@ contentType="text/html; charset=UTF-8"
 	    </nav>
 	</header>
 	
-	<p><a href='preCreate'>新規登録</a><p><!-- 社員の追加登録 -->	
+	
 	
 	<div class="container">
   		<div class="row ">
@@ -79,6 +79,12 @@ contentType="text/html; charset=UTF-8"
 				<button type="submit" class="btn btn-primary m-3">実行</button>
 			</form>	
 			</div>
+			
+			<div class="col-md-6">
+				<form action = 'preCreate' method="post">
+				 <button type="submit" class="btn btn-primary m-3">新規作成</button>
+				</form>
+			</div>
 		</div>
 	
 	<br>
@@ -87,7 +93,10 @@ contentType="text/html; charset=UTF-8"
 			<% if (message != null) { %>
 			    <p><%= message %></p>
 			<% } %>
-	
+	<%String errormessage = (String)request.getAttribute("errormessage"); %>
+	<% if (errormessage != null) {%>
+		    <%=errormessage %>
+	<%} %>
 	<table class="table">
 		<thead>
 			<tr>
@@ -115,7 +124,7 @@ contentType="text/html; charset=UTF-8"
 	</table>
 	
 	<br>
-	<p><a href='editGenre'>ジャンルの編集</a><p>
+	
 	<br>
 	</div>
 </body>
