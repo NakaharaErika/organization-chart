@@ -8,7 +8,7 @@ import dao.WorkDaoJDBC;
 public class ResetEmp{
 	//アカウントと紐づいているパスワードを新しいものに変更
 	private WorkDaoJDBC dao = new WorkDaoJDBC();
-    private String ResetPassSQL = "UPDATE account SET pass = ? WHERE userID = ?";
+    private String ResetPassSQL = "UPDATE Emproyee SET pass = ? WHERE emp_code = ?";
 
     public void ResetPass(String userId, String password) throws Exception {
     	//パスワードをハッシュ化

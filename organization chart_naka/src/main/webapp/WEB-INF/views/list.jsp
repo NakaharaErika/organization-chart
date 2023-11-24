@@ -1,6 +1,4 @@
-<%@ page language="java"
-contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %>
 <%@ page import="entity.DBWork" %>
 <%@ page import="entity.DepartmentWork" %>
@@ -15,13 +13,12 @@ contentType="text/html; charset=UTF-8"
   <title>人事検索システム</title>
 </head>
 <body>
+<% DBWork loggedInUser = (DBWork) session.getAttribute("loggedInUser"); %>
 	<header>
-	    <h1>人事検索システム</h1>
-	    
-	    <% DBWork loggedInUser = (DBWork) session.getAttribute("loggedInUser"); %>
-	     <% if (loggedInUser != null) { %>
-	        <p>ようこそ、<%= loggedInUser.getDepName() + " の " + loggedInUser.getFamilyName() + " " + loggedInUser.getLastName() %>さん</p>
-	    <% } %>
+        <h1>人事検索システム</h1>
+        <% if (session.getAttribute("loggedInUser") != null) { %>
+            <p>ようこそ、<%= loggedInUser.getDepName() %> の <%= loggedInUser.getFamilyName() %> <%= loggedInUser.getLastName() %> さん</p>
+        <% } %>
 			
 	    <nav class="pc-nav">
 	    	<form action="logout" method="POST"><input type="submit" value="ログアウト"></form>
@@ -59,19 +56,17 @@ contentType="text/html; charset=UTF-8"
 				            <input class="form-check-input" type="radio" name="depId" value="0" id="gridRadios0" checked>
 				            <label class="form-check-label" for="gridRadios0">全部署</label>
 				        </div>
-				        <% 
-				            List<DepartmentWork> departments = (List<DepartmentWork>) session.getAttribute("departments");
-				            if (departments != null) {
-				                for (int i = 1; i <= departments.size(); i++) {
-				                    DepartmentWork department = departments.get(i - 1);
-				                    Integer depId = department.getDepId(); // 部署IDを取得
-				                    String depName = department.getDepName(); // 部署名を取得
-				        %>
-				                        <input class="form-check-input" type="radio" name="depId" value="<%= depId %>" id="gridRadios<%= i %>">
-				                        <label class="form-check-label" for="gridRadios<%= i %>"><%= depName %></label>
 				        <%
-				                }
+				        List<DepartmentWork> departments = (List<DepartmentWork>) session.getAttribute("departments");
+				        if (departments != null) {
+				            for (int i = 0; i < departments.size(); i++) {
+				                DepartmentWork department = departments.get(i);
+				        %>
+				                    <input class="form-check-input" type="radio" name="depId" value="<%= department.getDepId() %>" id="gridRadios<%= i+1 %>">
+				                    <label class="form-check-label" for="gridRadios<%= i+1 %>"><%= department.getDepName() %></label>
+				        <%
 				            }
+				        }
 				        %>
 				    </div>
 				</fieldset>
@@ -89,14 +84,18 @@ contentType="text/html; charset=UTF-8"
 	
 	<br>
 	<hr>
-	<% String message = (String) request.getAttribute("message"); %>
-			<% if (message != null) { %>
-			    <p><%= message %></p>
-			<% } %>
-	<%String errormessage = (String)request.getAttribute("errormessage"); %>
-	<% if (errormessage != null) {%>
-		    <%=errormessage %>
-	<%} %>
+	
+	<%
+    String message = (String) request.getAttribute("message");
+    if (message != null) { %>
+        <p><%= message %></p>
+    <% }
+    String errormessage = (String) request.getAttribute("errormessage");
+    if (errormessage != null) { %>
+        <p><%= errormessage %></p>
+    <% }
+    %>
+    
 	<table class="table">
 		<thead>
 			<tr>
@@ -106,23 +105,39 @@ contentType="text/html; charset=UTF-8"
 			 <th scope="col">名</th>
 			 <th scope="col">部署</th>
 			 <th scope="col">役職</th>
+			 <th scope="col">編集</th>
+			 <th scope="col">削除</th>
 		</thead>
-		<tbody>	
-			<% ArrayList<HashMap<String, String>> rows = (ArrayList<HashMap<String, String>>)request.getAttribute("rows"); %>
-			<% int counter = 1; %>
-			<% for(HashMap<String,String> columns : rows){ %>
-			<tr>
-			    <th scope="row"><%= counter++ %></th>
-			    <td><a href='show?id=<%= columns.get("id") %>'><%= columns.get("emp_code") %></a></td>
-			    <td><%= columns.get("family_name") %></a></td>
-			    <td><%= columns.get("last_name") %></a></td>
-			    <td><%= columns.get("dep_name") %></td>
-			    <td><%= columns.get("post_name") %></td>
-			 <tr>
-			<% } %>
-		</tbody>
-	</table>
-	
+		<% 
+            List<HashMap<String, String>> rows = (List<HashMap<String, String>>) request.getAttribute("rows");
+            int counter = 1;
+            for (HashMap<String, String> columns : rows) {
+            %>
+                <tr>
+                    <th scope="row"><%= counter++ %></th>
+                    <td><a href='show?id=<%= columns.get("id") %>'><%= columns.get("emp_code") %></a></td>
+                    <td><%= columns.get("family_name") %></td>
+                    <td><%= columns.get("last_name") %></td>
+                    <td><%= columns.get("dep_name") %></td>
+                    <td><%= columns.get("post_name") %></td>
+                    <td>
+                        <% if ("1".equals(request.getAttribute("ediFlg")) || (loggedInUser.getDepId() == Integer.parseInt(columns.get("dep_id")))) { %>
+	                        <a href='edit?id=<%= columns.get("id") %>' class="btn btn-outline-primary btn-sm">編集</a>
+	                    <% } else { %>
+	                        <p>-</p>
+                    	<% } %>
+                    </td>
+                    <td>
+                        <% if ("1".equals(request.getAttribute("delFlg")) || (loggedInUser.getDepId() == Integer.parseInt(columns.get("dep_id")))) { %>
+                            <a href='show?id=<%= columns.get("id") %>' class="btn btn-outline-danger btn-sm">削除</a>
+                        <% } else { %>
+                            <p>-</p>
+                        <% } %>
+                    </td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
 	<br>
 	
 	<br>
