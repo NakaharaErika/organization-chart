@@ -6,6 +6,7 @@ contentType="text/html; charset=UTF-8"
 <%@ page import="entity.DepartmentWork" %>
 <%@ page import="entity.PostWork" %>
 <%@ page import="service.DateUtil" %>
+<%@ page import="java.time.LocalDate" %>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -54,18 +55,18 @@ contentType="text/html; charset=UTF-8"
 					 <div class="row">
 						<td><!-- 社員番号 -->
 							<div class="col-auto">   
-							  <input type="text" class="form-control" name="emp_code">
-							  <label>取得済みの最新の社員番号:<%= empDetails %></label>
+							  <input type="text" class="form-control" name="emp_code" required>
+							  <label>使用可能な社員番号:<%= empDetails %></label>
 							</div>
 					    </td>
 					    <td><!-- 性 -->
 					    	<div class="col-auto">   
-							  <input type="text" class="form-control" name="family_name">
+							  <input type="text" class="form-control" name="family_name"  required> 
 							 </div>
 					    </td>
 					    <td><!-- 名 -->
 					    	<div class="col-auto">   
-							  <input type="text" class="form-control" name="last_name">
+							  <input type="text" class="form-control" name="last_name"  required>
 							</div>
 					    </td>
 					    <td><!-- 所属部署 -->
@@ -116,33 +117,43 @@ contentType="text/html; charset=UTF-8"
 			<tbody>	
 				<tr>
 					    <td><!-- 入社日 -->
+						<%
+						    // 現在の日付を取得
+						    LocalDate today = LocalDate.now();
+						    
+						    // 年、月、日を取得
+						    int year = today.getYear();
+						    int month = today.getMonthValue();
+						    int day = today.getDayOfMonth();
+						%>
+					    
 					    <div class="row">
   							<div class="col-auto">
-							    <input type="text" class="form-control" name="hire_date_year" value="1970" size="4">
+							    <input type="text" class="form-control" name="hire_date_year" value="<%= year %>" size="4"  maxlength="4" pattern="\d{4}" required>
 							</div>
 							<div class="col-auto">
-							    <input type="text" class="form-control" name="hire_date_month" value="01" size="2">
+							    <input type="text" class="form-control" name="hire_date_month" value="<%= month %>" size="2"  maxlength="2" pattern="\d{2}" required>
 							</div>
 							<div class="col-auto">
-							    <input type="text" class="form-control" name="hire_date_day" value="01" size="2">
+							    <input type="text" class="form-control" name="hire_date_day" value="<%= day %>" size="2"  maxlength="2" pattern="\d{2}" required>
 							</div>
 						</div>
 						</td>
 						<td><!-- 誕生日 -->
 						<div class="row">
   							<div class="col-auto">
-							    <input type="text" class="form-control" name="birth_year" value="1970" size="4">
+							    <input type="text" class="form-control" name="birth_year" value="1970" size="4"  maxlength="4" pattern="\d{4}" required>
 							</div>
 							<div class="col-auto">
-							    <input type="text" class="form-control" name="birth_month" value="01" size="2">
+							    <input type="text" class="form-control" name="birth_month" value="01" size="2"  maxlength="2" pattern="\d{2}" required>
 							</div>
 							<div class="col-auto">
-							    <input type="text" class="form-control" name="birth_day" value="01" size="2">
+							    <input type="text" class="form-control" name="birth_day" value="01" size="2" maxlength="2" pattern="\d{2}" required>
 							</div>
 						</td>
 						<td><!-- パスワード -->
 					    	<div class="col-auto">   
-							  <input type="text" class="form-control" name="pass">
+							  <input type="text" class="form-control" name="pass" required>
 							</div>
 						</div>
 					    </td>

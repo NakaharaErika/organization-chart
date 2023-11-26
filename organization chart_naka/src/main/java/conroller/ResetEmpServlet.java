@@ -30,32 +30,32 @@ public class ResetEmpServlet extends HttpServlet {
 	    	if(empCode.equals(crrEmp)){
 		    	//ユーザーIDが存在するかチェック
 				if(service.checkempCodeExist(crrEmp)) {
-					if( password != null) {
+					if( !password.isEmpty()) {
 					    //パスワードをリセットする
 				    	reset.ResetPass(crrEmp,password);
-				    	request.setAttribute("message", "新しいパスワードをセットしました");
-				    	view = "/WEB-INF/views/login.jsp";
+				    	request.setAttribute("errormessage", "新しいパスワードをセットしました");
+				    	view = "list";
 					} else {
 						request.setAttribute("message", "パスワードを入力してください");
-				    	view = "/WEB-INF/views/reset.jsp";
+						view = "/WEB-INF/views/reset.jsp";
 					}
 				} else {
-					//IDが存在しない場合
-					String falseMessage = "IDが存在しません";
+					//IDが一致しない場合
+					String falseMessage = "変更対象の正しいIDを入力してください";
 					request.setAttribute("message", falseMessage);
-				    view = "/WEB-INF/views/reset.jsp";
+					view = "/WEB-INF/views/reset.jsp";
 				}
 	    	}else {
 	    		//削除対象が一致しない場合
 				String falseMessage = "削除対象と社員番号が一致していません";
 				request.setAttribute("message", falseMessage);
-			    view = "/WEB-INF/views/reset.jsp";
+				view = "/WEB-INF/views/reset.jsp";
 	    	}
 		} catch (Exception e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}
-		
+	    request.setAttribute("empCode",empCode);
 		RequestDispatcher dispatcher = request.getRequestDispatcher(view);
 		dispatcher.forward(request, response);
 	    

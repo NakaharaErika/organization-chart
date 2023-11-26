@@ -43,6 +43,13 @@ public class CreateEmpServlet extends HttpServlet {
 			String pass = request.getParameter("pass"); 
 		
 			List<Object> params = Arrays.asList(empCode,familyName,lastName,depId,postId,hireDate,birth);
+			boolean hasEmptyParam = params.stream().anyMatch(param -> param == null || param.toString().trim().isEmpty());
+			if(hasEmptyParam) {
+		    	// 空のパラメータがある場合は、エラーメッセージを設定して処理を中断
+		        request.setAttribute("message", "必須項目に空の値が含まれています。");
+		        RequestDispatcher dispatcher = request.getRequestDispatcher("create.jsp");
+		        dispatcher.forward(request, response);
+		    }
 			
 	        String view = null;
 	        String errormessage = null;
@@ -61,7 +68,7 @@ public class CreateEmpServlet extends HttpServlet {
 				// TODO 自動生成された catch ブロック
 				e.printStackTrace();
 			}
-			 request.setAttribute("message", errormessage);
+			 request.setAttribute("errormessage", errormessage);
 			 RequestDispatcher dispatcher = request.getRequestDispatcher(view);
 		     dispatcher.forward(request, response);
     	} else {

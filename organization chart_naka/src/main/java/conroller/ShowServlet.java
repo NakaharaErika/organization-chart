@@ -12,11 +12,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import service.GetEmpDeteailById;
+import service.SecurityService;
 
 @WebServlet("/show")
 public class ShowServlet extends HttpServlet {
 
-    private GetEmpDeteailById service = new GetEmpDeteailById();
+    private GetEmpDeteailById list = new GetEmpDeteailById();
+    SecurityService service = new SecurityService();
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
@@ -30,10 +32,29 @@ public class ShowServlet extends HttpServlet {
 		        }
 		
 		        String postId = request.getParameter("id"); // String 型のまま使用
+		        
+		      //編集・削除・パスワード変更権限の確認
+				try {
+					Boolean ediAllFlg = service.hasPermission(loggedInUser,"Edit Employee");
+					Boolean ediPartFlg = service.hasPermission(loggedInUser,"Edit MydepEmp");
+					Boolean delAllFlg = service.hasPermission(loggedInUser,"Delete Employee");
+					Boolean delPartFlg = service.hasPermission(loggedInUser,"Delete MydepEmp");
+					Boolean resFlg = service.hasPermission(loggedInUser,"Reset Password");
+					
+					request.setAttribute("ediAllFlg", ediAllFlg);
+					request.setAttribute("ediPartFlg", ediPartFlg);
+					request.setAttribute("delAllFlg", delAllFlg);
+					request.setAttribute("delPartFlg", delPartFlg);
+					request.setAttribute("resFlg", resFlg);
+				} catch (Exception e) {
+					// TODO 自動生成された catch ブロック
+					e.printStackTrace();
+				}
+				
 		        	//社員情報の取り出し
 		            HashMap<String, String> empDetails;
 					try {
-						empDetails = service.getEmpDeteailById(postId);
+						empDetails = list.getEmpDeteailById(postId);
 						request.setAttribute("empDetails", empDetails);
 			            
 					} catch (Exception e) {

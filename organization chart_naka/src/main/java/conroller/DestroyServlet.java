@@ -17,7 +17,7 @@ public class DestroyServlet extends HttpServlet {
 	
 	private DestroyEmp service = new DestroyEmp();
 	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if (request.getAttribute("message") == null) {
 			request.setAttribute("message", "人事システム");
 		}
@@ -32,12 +32,14 @@ public class DestroyServlet extends HttpServlet {
 				service.destroyEmp(empId);
 				request.setAttribute("errormessage", "削除が完了しました");
 			} catch (Exception e) {
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
+				request.setAttribute("errormessage", "不正な操作です");
+				String view = "list";
+		        RequestDispatcher dispatcher = request.getRequestDispatcher(view);
+		        dispatcher.forward(request, response);
 			}
             
    
-	        String view = "/WEB-INF/views/edit.jsp";
+	        String view = "list";
 	        RequestDispatcher dispatcher = request.getRequestDispatcher(view);
 	        dispatcher.forward(request, response);
 		} else {

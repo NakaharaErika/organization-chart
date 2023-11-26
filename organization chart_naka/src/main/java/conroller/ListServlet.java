@@ -27,22 +27,27 @@ public class ListServlet extends HttpServlet {
 	     DBWork loggedInUser = (DBWork) session.getAttribute("loggedInUser");
 	     
 	 if (loggedInUser != null) {
-	    	//社員リストを格納
 		 	//getで受け取った時や初期表示は自分の部署だけ降順で表示させる
-		 	//編集権限を確認（Reaad Employee or 情報部)
 	    	List<HashMap<String, String>> empList;
 			try {
+				//社員リストを格納
 				empList = list.getEmpListById(loggedInUser.getDepId(),"asc");
-				//閲覧権限の確認
-				String ediFlg = (service.hasPermission(loggedInUser, "Edit Employee"))? "1":"";
-				request.setAttribute("ediFlg", ediFlg);
-				//削除権限の確認
-				String delFlg = (service.hasPermission(loggedInUser, "Delete Employee"))? "1":"";
-				request.setAttribute("delFlg", delFlg);
+				request.setAttribute("rows", empList);
+				//編集権限を確認（Reaad Employee or 情報部)
+				Boolean ediAllFlg = service.hasPermission(loggedInUser,"Edit Employee");
+				Boolean ediPartFlg = service.hasPermission(loggedInUser,"Edit MydepEmp");
+				Boolean delAllFlg = service.hasPermission(loggedInUser,"Delete Employee");
+				Boolean delPartFlg = service.hasPermission(loggedInUser,"Delete MydepEmp");
+				Boolean crudFlg = service.hasPermission(loggedInUser,"CRUD All Tables");
+				
+				request.setAttribute("ediAllFlg", ediAllFlg);
+				request.setAttribute("ediPartFlg", ediPartFlg);
+				request.setAttribute("delAllFlg", delAllFlg);
+				request.setAttribute("delPartFlg", delPartFlg);
+				request.setAttribute("crudFlg", crudFlg);
 				
 				//初期セットのメッセージを出力
 				request.setAttribute("message", "現在の表示：あなたの所属部署");
-				request.setAttribute("rows", empList);
 			} catch (Exception e) {
 				// TODO 自動生成された catch ブロック
 				e.printStackTrace();

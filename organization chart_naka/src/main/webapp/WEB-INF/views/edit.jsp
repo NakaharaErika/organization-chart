@@ -36,7 +36,7 @@ contentType="text/html; charset=UTF-8"
 <%} %>
 <div class="container">
   		<div class="row mt-3">
-  		<form action="update" method="get">    
+  		<form action="update" method="post">    
   		<table class="table">
 			<thead>
 				<tr>
@@ -55,17 +55,17 @@ contentType="text/html; charset=UTF-8"
 					 <div class="row">
 						<td><!-- 社員番号 -->
 							<div class="col-auto">   
-							  <input type="text" class="form-control" name="emp_code" value="<%= empDetails.get("emp_code") %>">
+							  <input type="text" class="form-control" name="emp_code" value="<%= empDetails.get("emp_code") %>" required>
 							</div>
 					    </td>
 					    <td><!-- 性 -->
 					    	<div class="col-auto">   
-							  <input type="text" class="form-control" name="family_name" value="<%= empDetails.get("family_name") %>">
+							  <input type="text" class="form-control" name="family_name" value="<%= empDetails.get("family_name") %>" required>
 							 </div>
 					    </td>
 					    <td><!-- 名 -->
 					    	<div class="col-auto">   
-							  <input type="text" class="form-control" name="last_name" value="<%= empDetails.get("last_name") %>">
+							  <input type="text" class="form-control" name="last_name" value="<%= empDetails.get("last_name") %>" required>
 							</div>
 					    </td>
 					    <td><!-- 所属部署 -->
@@ -116,26 +116,26 @@ contentType="text/html; charset=UTF-8"
 					    <td><!-- 入社日 -->
 					    <div class="row">
   							<div class="col-auto">
-							    <input type="text" class="form-control" name="hire_date_year" value="<%= DateUtil.getYear(empDetails.get("hire_date")) %>" size="4">
+							    <input type="text" class="form-control" name="hire_date_year" value="<%= DateUtil.getYear(empDetails.get("hire_date")) %>" size="4" maxlength="4" pattern="\d{4}" required>
 							</div>
 							<div class="col-auto">
-							    <input type="text" class="form-control" name="hire_date_month" value="<%= DateUtil.getMonth(empDetails.get("hire_date")) %>" size="2">
+							    <input type="text" class="form-control" name="hire_date_month" value="<%= DateUtil.getMonth(empDetails.get("hire_date")) %>" size="2" maxlength="2" pattern="\d{2}" required>
 							</div>
 							<div class="col-auto">
-							    <input type="text" class="form-control" name="hire_date_day" value="<%= DateUtil.getDay(empDetails.get("hire_date")) %>" size="2">
+							    <input type="text" class="form-control" name="hire_date_day" value="<%= DateUtil.getDay(empDetails.get("hire_date")) %>" size="2" maxlength="2" pattern="\d{2}" required>
 							</div>
 						</div>
 						</td>
 						<td><!-- 誕生日 -->
 						<div class="row">
   							<div class="col-auto">
-							    <input type="text" class="form-control" name="birth_year" value="<%= DateUtil.getYear(empDetails.get("Birth")) %>" size="4">
+							    <input type="text" class="form-control" name="birth_year" value="<%= DateUtil.getYear(empDetails.get("Birth")) %>" size="4" maxlength="4" pattern="\d{4}" required>
 							</div>
 							<div class="col-auto">
-							    <input type="text" class="form-control" name="birth_month" value="<%= DateUtil.getMonth(empDetails.get("Birth")) %>" size="2">
+							    <input type="text" class="form-control" name="birth_month" value="<%= DateUtil.getMonth(empDetails.get("Birth")) %>" size="2" maxlength="2" pattern="\d{2}" required>
 							</div>
 							<div class="col-auto">
-							    <input type="text" class="form-control" name="birth_day" value="<%= DateUtil.getDay(empDetails.get("Birth")) %>" size="2">
+							    <input type="text" class="form-control" name="birth_day" value="<%= DateUtil.getDay(empDetails.get("Birth")) %>" size="2" maxlength="2" pattern="\d{2}" required>
 							</div>
 						</div>
 						</td>
@@ -152,7 +152,6 @@ contentType="text/html; charset=UTF-8"
 			    	<button type="submit" style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer; padding: 0; font: inherit;">戻る</button>
 				  </form>
 			  </li>
-			  <li><a href='show?id=<%= empDetails.get("id") %>'>キャンセル</a></li>
 		    </ul>
  		</div>
 </div>      

@@ -65,9 +65,35 @@ contentType="text/html; charset=UTF-8"
 		    		<button type="submit" style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer; padding: 0; font: inherit;">戻る</button>
 				</form>
 			  </li>
-		      <li><p><a href='edit?id=<%= empDetails.get("id") %>'>編集</a></p></li>
-		      <li><p><a href='destroy?id=<%= empDetails.get("id") %>'>削除</a></p></li>
-		      <li><p><a href='resetPass?empCode=<%= empDetails.get("emp_code") %>'>パスワードをリセット</a><p><li>
+		      <li><% if ((Boolean) request.getAttribute("ediAllFlg") 
+                        	||((Boolean) request.getAttribute("ediPartFlg") 
+                        		&& loggedInUser.getDepId() == Integer.parseInt(empDetails.get("dep_id")))) { 
+                   %>
+                       <form action="edit" method="post">
+		                    <input type="hidden" name="id" value="<%= empDetails.get("id") %>">
+		                    <button type="submit" class="btn btn-outline-primary btn-sm">編集</button>
+		                </form>
+                  <% } else { %>
+                       <p>-</p>
+                   <% } %>
+              </li>
+		      <li><% if ((Boolean) request.getAttribute("delAllFlg")
+                        	||((Boolean) request.getAttribute("delPartFlg") 
+                        	   && loggedInUser.getDepId() == Integer.parseInt(empDetails.get("dep_id")))) { 
+                  %>
+                     <form action="destroy" method="post">
+	                    <input type="hidden" name="id" value="<%= empDetails.get("id") %>">
+	                 	<button type="submit" class="btn btn-outline-danger btn-sm">削除</button>
+	                </form>
+                  <% } else { %>
+                      <p>-</p>
+                  <% } %>
+              </li>
+		      <li><% if ((Boolean) request.getAttribute("resFlg")){ %>
+		      			<a href='resetPass?empCode=<%= empDetails.get("emp_code") %>' class="btn btn-outline-success btn-sm">パスワードをリセット</a><li>
+		      		<% } else { %>
+                       <p>-</p>
+                    <% } %>
 		    </ul>
  		</div>
  		</div>

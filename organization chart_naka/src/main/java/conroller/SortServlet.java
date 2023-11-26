@@ -36,15 +36,20 @@ public class SortServlet extends HttpServlet {
 		 //部署名
 		 String depName = findDepNameById(depId, departments);
 		 
-		 	//権限の確認
-			
 			try {
-				//編集権限の確認
-				String ediFlg = (service.hasPermission(loggedInUser, "CRUD All Tables"))? "1":"";
-				request.setAttribute("ediFlg", ediFlg);
-				//削除権限の確認
-				String delFlg = (service.hasPermission(loggedInUser, "CRUD All Tables"))? "1":"";
-				request.setAttribute("delFlg", delFlg);
+				//閲覧権限の確認
+				//編集権限を確認（Reaad Employee or 情報部)
+				Boolean ediAllFlg = service.hasPermission(loggedInUser,"Edit Employee");
+				Boolean ediPartFlg = service.hasPermission(loggedInUser,"Edit MydepEmp");
+				Boolean deAllFlg = service.hasPermission(loggedInUser,"Delete Employee");
+				Boolean delPartFlg = service.hasPermission(loggedInUser,"Delete MydepEmp");
+				Boolean crudFlg = service.hasPermission(loggedInUser,"CRUD All Tables");
+				
+				request.setAttribute("ediAllFlg", ediAllFlg);
+				request.setAttribute("ediPartFlg", ediPartFlg);
+				request.setAttribute("delAllFlg", deAllFlg);
+				request.setAttribute("delPartFlg", delPartFlg);
+				request.setAttribute("crudFlg", crudFlg);
 			 
 			} catch (Exception e) {
 				// TODO 自動生成された catch ブロック

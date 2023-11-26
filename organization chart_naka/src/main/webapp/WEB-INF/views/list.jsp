@@ -79,6 +79,17 @@
 				<form action = 'preCreate' method="post">
 				 <button type="submit" class="btn btn-primary m-3">新規作成</button>
 				</form>
+				<br>
+				<% 
+	                if ((Boolean) request.getAttribute("crudFlg")) {
+	            %>
+	                <form action="crud" method="post">
+	                    <button type="submit" name="table" value="Post" class="btn btn-outline-primary">役職マスタ</button>
+	                    <button type="submit" name="table" value="Department" class="btn btn-outline-primary">部署マスタ</button>
+	                    <button type="submit" name="table" value="Permissions" class="btn btn-outline-primary">権限マスタ</button>
+	                </form>
+				<% }%>
+				
 			</div>
 		</div>
 	
@@ -89,12 +100,12 @@
     String message = (String) request.getAttribute("message");
     if (message != null) { %>
         <p><%= message %></p>
-    <% }
+    <% } %>
+    <%
     String errormessage = (String) request.getAttribute("errormessage");
     if (errormessage != null) { %>
         <p><%= errormessage %></p>
-    <% }
-    %>
+    <% }%>
     
 	<table class="table">
 		<thead>
@@ -121,19 +132,33 @@
                     <td><%= columns.get("dep_name") %></td>
                     <td><%= columns.get("post_name") %></td>
                     <td>
-                        <% if ("1".equals(request.getAttribute("ediFlg")) || (loggedInUser.getDepId() == Integer.parseInt(columns.get("dep_id")))) { %>
-	                        <a href='edit?id=<%= columns.get("id") %>' class="btn btn-outline-primary btn-sm">編集</a>
-	                    <% } else { %>
-	                        <p>-</p>
-                    	<% } %>
-                    </td>
-                    <td>
-                        <% if ("1".equals(request.getAttribute("delFlg")) || (loggedInUser.getDepId() == Integer.parseInt(columns.get("dep_id")))) { %>
-                            <a href='show?id=<%= columns.get("id") %>' class="btn btn-outline-danger btn-sm">削除</a>
-                        <% } else { %>
-                            <p>-</p>
-                        <% } %>
-                    </td>
+                    	<% 
+			                if ((Boolean) request.getAttribute("ediAllFlg") 
+			                    || ((Boolean) request.getAttribute("ediPartFlg") 
+			                        && loggedInUser.getDepId() == Integer.parseInt(columns.get("dep_id")))) {
+			            %>
+			                <form action="edit" method="post">
+			                    <input type="hidden" name="id" value="<%= columns.get("id") %>">
+			                    <button type="submit" class="btn btn-outline-primary btn-sm">編集</button>
+			                </form>
+			                <% } else { %>
+			                    <p>-</p>
+			                <% } %>
+			        </td>
+			        <td>
+			            <% 
+			                if ((Boolean) request.getAttribute("delAllFlg")
+			                    || ((Boolean) request.getAttribute("delPartFlg") 
+			                        && loggedInUser.getDepId() == Integer.parseInt(columns.get("dep_id")))) {
+			            %>
+			            	<form action="destroy" method="post">
+			                    <input type="hidden" name="id" value="<%= columns.get("id") %>">
+			                    <button type="submit" class="btn btn-outline-danger btn-sm">削除</button>
+			                </form>
+			                <% } else { %>
+			                    <p>-</p>
+			                <% } %>
+			        </td>
                 </tr>
             <% } %>
         </tbody>
