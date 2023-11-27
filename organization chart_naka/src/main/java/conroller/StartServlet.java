@@ -37,6 +37,7 @@ public class StartServlet extends HttpServlet {
 	    // ユーザーから送信された社員番号とパスワードを取得する。
 	    String empCode = request.getParameter("user_id");
 	    String password = request.getParameter("password");
+	    String falseMessage = null;
 	    String view = null;
 	    
 	    if (!empCode.trim().isEmpty() && !password.trim().isEmpty()) {
@@ -65,19 +66,17 @@ public class StartServlet extends HttpServlet {
 			    		//一致していなかったら失敗カウントをカウントアップ
 			    		boolean canRetry = check.incrementFalseCnt(empCode);
 			    		//失敗カウントを調べて,3回未満ならtrue、3回以上ならfalseを返す。
-			    		String falseMessage = canRetry? "IDかパスワードが異なります":"３回間違えたのでロックしました";
-			    		request.setAttribute("message", falseMessage);
+			    		falseMessage = canRetry? "IDかパスワードが異なります":"３回間違えたのでロックしました";
 			    		view = "/WEB-INF/views/login.jsp";
 			    	}
 				} else {
 					//ロックされていたらエラーメッセージを表示
-					request.setAttribute("message", "このアカウントはロックされています");
+					falseMessage = "このアカウントはロックされています";
 					view = "/WEB-INF/views/login.jsp";
 				}
 			} else {
 				//IDが存在しない場合
-				String falseMessage = "IDが存在しません";
-				request.setAttribute("message", falseMessage);
+				falseMessage = "IDが存在しません";
 			    view = "/WEB-INF/views/login.jsp";
 			}
 		} catch (Exception e) {
@@ -86,11 +85,11 @@ public class StartServlet extends HttpServlet {
 		}
 	    } else {
 	    	//入力していない場合
-	    	String falseMessage = "ゆーざーIDとパスワードを入力してください";
-	    	request.setAttribute("message", falseMessage);
+	    	falseMessage = "ゆーざーIDとパスワードを入力してください";
 	        view = "/WEB-INF/views/login.jsp";
 	    }
 		
+	    request.setAttribute("message", falseMessage);
 		RequestDispatcher dispatcher = request.getRequestDispatcher(view);
 		dispatcher.forward(request, response);
 	    
