@@ -36,7 +36,7 @@ public class PreMasterServlet extends HttpServlet {
 	    	//権限を確認
 	    	try {
 				if(service.hasPermission(loggedInUser, "CRUD All Tables")) {
-				    	//一番最新の社員番号を取得
+				    	//マスターテーブルを取得
 						try {
 							List<HashMap<String, String>> mstList;
 							mstList = list.selectMster(mst);

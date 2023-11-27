@@ -1,3 +1,6 @@
+//https://docs.google.com/presentation/d/1BCwOQNUL9-ogwd40dvbEIemkbvKmzYB0TuYTJQ4eVf4/edit#slide=id.p
+//↑今回の状態遷移図もどき＆テーブル構成
+
 package conroller;
 
 import java.io.IOException;

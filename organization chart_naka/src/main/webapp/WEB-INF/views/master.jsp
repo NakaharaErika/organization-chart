@@ -52,7 +52,7 @@
 		<% 
             List<HashMap<String, String>> rows = (List<HashMap<String, String>>) request.getAttribute("mstList");
             for (HashMap<String, String> row : rows) {
-            	//一旦キーをArrayListに格納
+            	//HashMapではキーを指定する必要があるので、一旦キーをArrayListに格納
             	List<String>keys = new ArrayList<>(row.keySet());
             %>
                 <tr>
@@ -80,6 +80,9 @@
              	<button type="submit" class="btn btn-outline-success btn-sm">カラムを追加</button>
 	</form>
 	<br>
+	<form action="list" method="post" style="display: inline;">
+		    		<button type="submit" style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer; padding: 0; font: inherit;">戻る</button>
+				</form>
 	</div>
 </body>
 </html>
