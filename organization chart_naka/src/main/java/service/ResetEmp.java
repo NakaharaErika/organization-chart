@@ -1,5 +1,6 @@
 package service;
 
+import java.sql.Connection;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,6 +15,9 @@ public class ResetEmp{
     	//パスワードをハッシュ化
     	String hashedPassword = HashGenerator.generateHash(password);
     	List<Object> params = Arrays.asList(hashedPassword, userId);
-		dao.executeUpdate(ResetPassSQL, params);   
+    	
+    	try(Connection conn = DBConnection.createConnection()){
+    	dao.executeUpdate(conn, ResetPassSQL, params); 
+    	}
     }
 }

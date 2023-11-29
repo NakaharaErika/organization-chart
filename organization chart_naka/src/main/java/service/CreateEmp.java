@@ -1,8 +1,9 @@
 package service;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import dao.WorkDaoJDBC;
@@ -19,13 +20,15 @@ public class CreateEmp{
     public String getPreEmp() throws Exception {
     	//一番最新の社員番号を取得する
     	List<Object> params = Arrays.asList();
-    	List<HashMap<String, Object>> result = dao.executeQuery(checkPreSQL, params);
+    	try (Connection conn = DBConnection.createConnection();
+   		     ResultSet rs = dao.executeQuery(conn, checkPreSQL, params)) {
 
-        if (!result.isEmpty()) {
-        	//先頭の値をString型で返す
-            return (String) result.get(0).get("emp_code");
-        }
-		return "値が存在しません";
+	        if (rs.next()) {
+	        	//先頭の値をString型で返す
+	        	return rs.getString("emp_code");
+	        }
+	        return "値が存在しません";
+    	}
     }
     
     public void createEmp(List<Object> params, String pass) throws Exception {
@@ -33,6 +36,7 @@ public class CreateEmp{
     	String hashedPassword = HashGenerator.generateHash(pass);
     	List<Object> newParams = new ArrayList<>(params);
     	newParams.add(hashedPassword);
-    	dao.executeUpdate(insertSQL, newParams);
+    	Connection conn = DBConnection.createConnection();
+    	dao.executeUpdate(conn, insertSQL, params);
     }
 }

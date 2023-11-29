@@ -1,5 +1,6 @@
 package service;
 
+import java.sql.Connection;
 import java.util.Arrays;
 import java.util.List;
 
@@ -12,7 +13,8 @@ public class DestroyEmp{
     
     public void destroyEmp(String id) throws Exception {
     	List<Object> params = Arrays.asList(id);
-    	dao.executeUpdate(checkUserSQL, params);
+    	Connection conn = DBConnection.createConnection();
+    	dao.executeUpdate(conn, checkUserSQL, params);
  
     }
 }

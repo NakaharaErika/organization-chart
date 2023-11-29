@@ -1,5 +1,6 @@
 package service;
 
+import java.sql.Connection;
 import java.util.List;
 
 import dao.WorkDaoJDBC;
@@ -18,7 +19,8 @@ public class UpdateEmp {
                 + "Birth = ? "
                 + "WHERE id = ?;";
         
-        dao.executeUpdate(sortSQL, params);
-        
+        try(Connection conn = DBConnection.createConnection()){
+        	dao.executeUpdate(conn, sortSQL, params);
+        }
     }
 }

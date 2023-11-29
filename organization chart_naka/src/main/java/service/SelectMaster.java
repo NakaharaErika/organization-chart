@@ -1,29 +1,43 @@
 package service;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import com.mysql.cj.jdbc.result.ResultSetMetaData;
+
 import dao.WorkDaoJDBC;
 
 public class SelectMaster {
     private WorkDaoJDBC dao = new WorkDaoJDBC();
-    //ログイン直後の並び順
+    //マスタ用テーブルを作成する
     public List<HashMap<String, String>> selectMster(String mst) throws Exception {
     	List<Object> params = Arrays.asList();
         String mstSQL = "SELECT * FROM " + mst;
         
-        List<HashMap<String, Object>> result = dao.executeQuery(mstSQL, params);
-        List<HashMap<String, String>> master = new ArrayList<>();
+        try (Connection conn = DBConnection.createConnection();
+             ResultSet rs = dao.executeQuery(conn,mstSQL, params)) {
+         	//ResultSetMetaDataオブジェクトで,ResultSetオブジェクトの列の型と,プロパティに関する情報を取得する
+             ResultSetMetaData metaData = (ResultSetMetaData) rs.getMetaData();
+           //得られた列の数を格納
+             int columnCount = metaData.getColumnCount();
+        		// リストから結果を取得し、List<HashMap<String, String>>に変換
+             List<HashMap<String, String>> masters = new ArrayList<>();
 
-        for (HashMap<String, Object> row : result) {
-            HashMap<String, String> todo = new HashMap<>();
-            for (String key : row.keySet()) {
-                todo.put(key, row.get(key).toString());
-            }
-            master.add(todo);
-        }
-        return master;
+             while (rs.next()) {
+      			HashMap<String, String> mster = new HashMap<>();
+	                for (int i = 1; i <= columnCount; i++) {	
+	                	//ハッシュマップに、列名をキーにして各行ごとの値を入れていく
+	                    String columnName = metaData.getColumnName(i);
+	                    String value = rs.getString(i);
+	                    mster.put(columnName, value);
+	                }
+	                masters.add(mster);
+		     }
+		   return masters;
+		}
     }
 }

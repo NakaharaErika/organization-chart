@@ -1,7 +1,8 @@
 package service;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import dao.WorkDaoJDBC;
@@ -16,11 +17,13 @@ public class CheckFalseCount{
     //使用可能なアカウントかチェック（カウントが3以上なら不可
     public boolean isAccountLocked (String empCode) throws Exception {
 	    	List<Object> params = Arrays.asList(empCode);
-	    	List<HashMap<String, Object>> result = dao.executeQuery(checkfalseSQL, params);
+	    	try (Connection conn = DBConnection.createConnection();
+		         ResultSet rs = dao.executeQuery(conn, checkfalseSQL, params)) {
 	    	//結果値が空ではないなら、得られた値をintに変換（失敗カウントの取り出し）
-	    	if(!result.isEmpty()) {
-	    		int falseCount = (Integer) result.get(0).get("falsecnt");
-	    		return falseCount >= 3;
+	    		if (rs.next()) {
+	                int falseCount = rs.getInt("falsecnt");
+	                return falseCount >= 3;
+	            }
 	    	}
 	    return false;
     }
@@ -28,20 +31,22 @@ public class CheckFalseCount{
     //失敗カウントを増やす
     public Boolean incrementFalseCnt(String empCode) throws Exception {
     	List<Object> params = Arrays.asList(empCode);
-        dao.executeUpdate(falsecountSQL, params);
-        //現在の失敗回数を取得
-        List<HashMap<String, Object>> result = dao.executeQuery(checkfalseSQL, params);
-        //カウントアップ後の値が3ならアカウントロック(false)
-        if(!result.isEmpty()) {
-        	int falseCount = (Integer) result.get(0).get("falsecnt");
-        	return falseCount < 3;
-        }
+    	try (Connection conn = DBConnection.createConnection();
+		     ResultSet rs = dao.executeQuery(conn, falsecountSQL, params)) {
+	        //カウントアップ後の値が3ならアカウントロック(false)
+	        if(rs.next()) {
+	        	int falseCount = rs.getInt("falsecnt");
+	        	return falseCount < 3;
+	        }
+    	}
         return true;
     }
     
     //ユーザー認証に成功したら、失敗カウントを0にする
     public void countReset(String empCode) throws Exception {
     	List<Object> params = Arrays.asList(empCode);
-    	dao.executeUpdate(countStopSQL, params);
+    try(Connection conn = DBConnection.createConnection()){
+    	dao.executeUpdate(conn, countStopSQL, params);
+    }
     } 
 }

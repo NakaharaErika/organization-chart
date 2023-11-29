@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import entity.DBWork;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -53,11 +52,10 @@ public class ListServlet extends HttpServlet {
 				e.printStackTrace();
 			}      
 	 } else {
-		response.sendRedirect("bbb");
+		response.sendRedirect("start");
      }
 	 	
 	    String view = "/WEB-INF/views/list.jsp";
-		RequestDispatcher dispatcher = request.getRequestDispatcher(view);
-		dispatcher.forward(request, response);   
+		request.getRequestDispatcher(view).forward(request, response);   
 	}
 }

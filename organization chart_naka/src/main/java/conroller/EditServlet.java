@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import entity.DBWork;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -44,13 +43,9 @@ public class EditServlet extends HttpServlet {
 	        } else {
 	        	response.sendRedirect("start");
 	        }
-
-            
-            String view = "/WEB-INF/views/edit.jsp";
-            RequestDispatcher dispatcher = request.getRequestDispatcher(view);
-            dispatcher.forward(request, response);
-
-        
+        	
+        	String view = "/WEB-INF/views/edit.jsp";
+            request.getRequestDispatcher(view).forward(request, response);   
 	}
 
 

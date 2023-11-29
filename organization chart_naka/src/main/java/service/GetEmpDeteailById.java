@@ -1,8 +1,12 @@
 package service;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+
+import com.mysql.cj.jdbc.result.ResultSetMetaData;
 
 import dao.WorkDaoJDBC;
 
@@ -17,18 +21,24 @@ public class GetEmpDeteailById {
     public HashMap<String, String> getEmpDeteailById(String no) throws Exception {
     	List<Object> params = Arrays.asList(no);
     	//かくれ社員Noに紐づく詳細情報を取り出す。
-        List<HashMap<String, Object>> result = dao.executeQuery(empListSQL, params);
-        
-        // リストから最初の結果を取得し、HashMap<String, String>に変換
-        if (!result.isEmpty()) {
-            HashMap<String, Object> row = result.get(0);
-            HashMap<String, String> empDetails = new HashMap<>();
-            for (String key : row.keySet()) {
-                Object value = row.get(key);
-                empDetails.put(key, value != null ? value.toString() : null);
+    	try (Connection conn = DBConnection.createConnection();
+      		 ResultSet rs = dao.executeQuery(conn,empListSQL, params)) {
+    		// リストから最初の結果を取得し、HashMap<String, String>に変換
+    		if (rs.next()) {
+                HashMap<String, String> empDetails = new HashMap<>();
+               //ResultSetMetaDataオブジェクトで,ResultSetオブジェクトの列の型と,プロパティに関する情報を取得する
+                ResultSetMetaData metaData = (ResultSetMetaData) rs.getMetaData();
+                //得られた列の数を格納
+                int columnCount = metaData.getColumnCount();
+                for (int i = 1; i <= columnCount; i++) {
+                	//ハッシュマップに、列名をキーにして各行ごとの値を入れていく
+                    String columnName = metaData.getColumnName(i);
+                    String value = rs.getString(i);
+                    empDetails.put(columnName, value);
+                }
+                return empDetails;
             }
-            return empDetails;
-        }
+    	}
         return null;
     }
 }

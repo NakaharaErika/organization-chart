@@ -65,9 +65,9 @@ public class ShowServlet extends HttpServlet {
 		        } else {
 		        	response.sendRedirect("start");
 		        }
-
-        String view = "/WEB-INF/views/post.jsp";
-        RequestDispatcher dispatcher = request.getRequestDispatcher(view);
-        dispatcher.forward(request, response);
+         response.sendRedirect("list");
+//        String view = "/WEB-INF/views/post.jsp";
+//        RequestDispatcher dispatcher = request.getRequestDispatcher(view);
+//        dispatcher.forward(request, response);
     }
 }
