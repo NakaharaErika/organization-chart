@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import dao.DBConnection;
 import dao.WorkDaoJDBC;
 import entity.DBWork;
 import entity.DepartmentWork;
@@ -13,7 +14,6 @@ import entity.PostWork;
 
 public class WorkService {
 	 
-	WorkDaoJDBC dao = new WorkDaoJDBC();
 	
 	private String checkUserIdSQL = "SELECT COUNT(*) FROM Employee WHERE emp_code = ?";
 	private String checkUserPassSQL = "SELECT * FROM Employee "
@@ -31,7 +31,7 @@ public class WorkService {
 			List<Object> params = Arrays.asList(userId);
 	        //SQLの実行
 			try (Connection conn = DBConnection.createConnection();
-	             ResultSet rs = dao.executeQuery(conn, checkUserIdSQL, params)) {
+	             ResultSet rs = WorkDaoJDBC.executeQuery(conn, checkUserIdSQL, params)) {
 	                return rs.next() && rs.getLong(1) > 0;
 	            }
 		}
@@ -45,7 +45,7 @@ public class WorkService {
 		List<Object> params = Arrays.asList(id, hashedPassword);
 		//SQL実行
 		try (Connection conn = DBConnection.createConnection();
-	         ResultSet rs = dao.executeQuery(conn, checkUserPassSQL, params)) {
+	         ResultSet rs = WorkDaoJDBC.executeQuery(conn, checkUserPassSQL, params)) {
 		//結果をDTOに挿入
 		    if(rs.next()) {
 		    	//DTO作成
@@ -69,7 +69,7 @@ public class WorkService {
     	//変数を格納
     	List<Object> params = Arrays.asList();
     	try (Connection conn = DBConnection.createConnection();
-   	         ResultSet rs = dao.executeQuery(conn, getAllDepartmentsSQL, params)) {
+   	         ResultSet rs = WorkDaoJDBC.executeQuery(conn, getAllDepartmentsSQL, params)) {
     		while (rs.next()) {
                 DepartmentWork department = new DepartmentWork();
                 department.setDepId(rs.getInt("dep_id"));
@@ -86,7 +86,7 @@ public class WorkService {
     	//変数を格納
     	List<Object> params = Arrays.asList();
     	try (Connection conn = DBConnection.createConnection();
-      	     ResultSet rs = dao.executeQuery(conn, getAllPostsSQL, params)) {
+      	     ResultSet rs = WorkDaoJDBC.executeQuery(conn, getAllPostsSQL, params)) {
     	//得られた部署IDと部署名の組み合わせを登録
     		while (rs.next()) {
 	    		PostWork post = new PostWork();

@@ -9,11 +9,11 @@ import java.util.List;
 
 import com.mysql.cj.jdbc.result.ResultSetMetaData;
 
+import dao.DBConnection;
 import dao.WorkDaoJDBC;
 
 public class GetEmpListById {
-    private WorkDaoJDBC dao = new WorkDaoJDBC();
-    //ログイン直後の並び順
+   //ログイン直後の並び順
     public List<HashMap<String, String>> getEmpListById(int item, String sortItem) throws Exception {
         String sortSQL = "SELECT * FROM Employee "
         		+ "INNER JOIN Department ON Employee.dep_id = Department.dep_id "
@@ -24,7 +24,7 @@ public class GetEmpListById {
         List<Object> params = Arrays.asList();
         
         try (Connection conn = DBConnection.createConnection();
-        	 ResultSet rs = dao.executeQuery(conn,sortSQL, params)) {
+        	 ResultSet rs = WorkDaoJDBC.executeQuery(conn,sortSQL, params)) {
         	//ResultSetMetaDataオブジェクトで,ResultSetオブジェクトの列の型と,プロパティに関する情報を取得する
             ResultSetMetaData metaData = (ResultSetMetaData) rs.getMetaData();
           //得られた列の数を格納
@@ -58,7 +58,7 @@ public class GetEmpListById {
         List<Object> params = Arrays.asList(depId);
         
         try (Connection conn = DBConnection.createConnection();
-           	 ResultSet rs = dao.executeQuery(conn,sortSQL, params)) {
+           	 ResultSet rs = WorkDaoJDBC.executeQuery(conn,sortSQL, params)) {
            	//ResultSetMetaDataオブジェクトで,ResultSetオブジェクトの列の型と,プロパティに関する情報を取得する
                ResultSetMetaData metaData = (ResultSetMetaData) rs.getMetaData();
              //得られた列の数を格納
@@ -91,7 +91,7 @@ public class GetEmpListById {
         List<Object> params = Arrays.asList();
         
         try (Connection conn = DBConnection.createConnection();
-             ResultSet rs = dao.executeQuery(conn,sortSQL, params)) {
+             ResultSet rs = WorkDaoJDBC.executeQuery(conn,sortSQL, params)) {
               	//ResultSetMetaDataオブジェクトで,ResultSetオブジェクトの列の型と,プロパティに関する情報を取得する
                   ResultSetMetaData metaData = (ResultSetMetaData) rs.getMetaData();
                 //得られた列の数を格納

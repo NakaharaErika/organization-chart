@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import dao.DBConnection;
 import dao.WorkDaoJDBC;
 
 public class CreateEmp{
 	//アカウント新規作成。社員番号がすでに登録されているものと重複していないかチェック後に、新規作成する
-    private WorkDaoJDBC dao = new WorkDaoJDBC();
     private String checkPreSQL = "SELECT emp_code FROM Employee ORDER BY emp_code DESC limit 1";
     private String insertSQL = "INSERT INTO Employee ("
             + "emp_code, family_name, last_name, dep_id, post_id, hire_date, Birth, falsecnt, pass"
@@ -21,7 +21,7 @@ public class CreateEmp{
     	//一番最新の社員番号を取得する
     	List<Object> params = Arrays.asList();
     	try (Connection conn = DBConnection.createConnection();
-   		     ResultSet rs = dao.executeQuery(conn, checkPreSQL, params)) {
+   		     ResultSet rs = WorkDaoJDBC.executeQuery(conn, checkPreSQL, params)) {
 
 	        if (rs.next()) {
 	        	//先頭の値をString型で返す
@@ -37,6 +37,6 @@ public class CreateEmp{
     	List<Object> newParams = new ArrayList<>(params);
     	newParams.add(hashedPassword);
     	Connection conn = DBConnection.createConnection();
-    	dao.executeUpdate(conn, insertSQL, params);
+    	WorkDaoJDBC.executeUpdate(conn, insertSQL, params);
     }
 }

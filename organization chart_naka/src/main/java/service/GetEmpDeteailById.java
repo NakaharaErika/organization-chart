@@ -8,10 +8,10 @@ import java.util.List;
 
 import com.mysql.cj.jdbc.result.ResultSetMetaData;
 
+import dao.DBConnection;
 import dao.WorkDaoJDBC;
 
 public class GetEmpDeteailById {
-    private WorkDaoJDBC dao = new WorkDaoJDBC();
     private String empListSQL = "SELECT * FROM Employee "
     		+ "INNER JOIN Department ON Employee.dep_id = Department.dep_id "
     		+ "LEFT JOIN Post ON Employee.post_id = Post.post_id "
@@ -22,7 +22,7 @@ public class GetEmpDeteailById {
     	List<Object> params = Arrays.asList(no);
     	//かくれ社員Noに紐づく詳細情報を取り出す。
     	try (Connection conn = DBConnection.createConnection();
-      		 ResultSet rs = dao.executeQuery(conn,empListSQL, params)) {
+      		 ResultSet rs = WorkDaoJDBC.executeQuery(conn,empListSQL, params)) {
     		// リストから最初の結果を取得し、HashMap<String, String>に変換
     		if (rs.next()) {
                 HashMap<String, String> empDetails = new HashMap<>();

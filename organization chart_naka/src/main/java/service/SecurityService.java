@@ -5,13 +5,11 @@ import java.sql.ResultSet;
 import java.util.Arrays;
 import java.util.List;
 
+import dao.DBConnection;
 import dao.WorkDaoJDBC;
 import entity.DBWork;
 
 public class SecurityService {
-
-	WorkDaoJDBC dao = new WorkDaoJDBC();
-	
 	private String checkParmissionSQL = "SELECT p.permission_name FROM Permissions p "
             + "JOIN RolePermissions rp ON p.permission_id = rp.permission_id "
             + "WHERE rp.role_id = ? AND (rp.department_id IS NULL OR rp.department_id = ?)";
@@ -25,7 +23,7 @@ public class SecurityService {
 		List<Object> params = Arrays.asList(postId,depId);
         //SQLの実行
 		try (Connection conn = DBConnection.createConnection();
-	         ResultSet rs = dao.executeQuery(conn, checkParmissionSQL, params)) {
+	         ResultSet rs = WorkDaoJDBC.executeQuery(conn, checkParmissionSQL, params)) {
 			// 結果セットをループして検証
 	        while (rs.next()) {
 	            String permName = rs.getString("permission_name");

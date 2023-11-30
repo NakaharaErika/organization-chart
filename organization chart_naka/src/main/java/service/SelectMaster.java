@@ -9,17 +9,17 @@ import java.util.List;
 
 import com.mysql.cj.jdbc.result.ResultSetMetaData;
 
+import dao.DBConnection;
 import dao.WorkDaoJDBC;
 
 public class SelectMaster {
-    private WorkDaoJDBC dao = new WorkDaoJDBC();
     //マスタ用テーブルを作成する
     public List<HashMap<String, String>> selectMster(String mst) throws Exception {
     	List<Object> params = Arrays.asList();
         String mstSQL = "SELECT * FROM " + mst;
         
         try (Connection conn = DBConnection.createConnection();
-             ResultSet rs = dao.executeQuery(conn,mstSQL, params)) {
+             ResultSet rs = WorkDaoJDBC.executeQuery(conn,mstSQL, params)) {
          	//ResultSetMetaDataオブジェクトで,ResultSetオブジェクトの列の型と,プロパティに関する情報を取得する
              ResultSetMetaData metaData = (ResultSetMetaData) rs.getMetaData();
            //得られた列の数を格納

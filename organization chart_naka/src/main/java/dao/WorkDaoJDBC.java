@@ -9,7 +9,7 @@ import java.util.List;
 public class WorkDaoJDBC {
 	
 	//汎用メソッド(削除、更新、作成)
-	public void executeUpdate(Connection conn, String sql, List<Object> params) throws ClassNotFoundException, SQLException {
+	public static void executeUpdate(Connection conn, String sql, List<Object> params) throws ClassNotFoundException, SQLException {
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			setParameters(stmt, params);
 			stmt.executeUpdate();
@@ -17,14 +17,14 @@ public class WorkDaoJDBC {
 	
 	//汎用メソッド（読み出し）
 	//今回はResultsetを返すパターンで練習
-	public ResultSet executeQuery(Connection conn, String sql, List<Object> params) throws SQLException, ClassNotFoundException{
+	public static ResultSet executeQuery(Connection conn, String sql, List<Object> params) throws SQLException, ClassNotFoundException{
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			setParameters(stmt, params);
 			 return stmt.executeQuery();
 	}
 	
 	//変数の格納
-	private void setParameters(PreparedStatement stmt, List<Object> params) throws SQLException{
+	private static void setParameters(PreparedStatement stmt, List<Object> params) throws SQLException{
 		for (int i = 0; i < params.size(); i++) {
 			stmt.setObject(i + 1, params.get(i));
 		}
